@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import todayImage from '../../assets/imgs/today.jpg'
 import Task from "../components/Task"
 import { useEffect, useState } from "react"
+import AddTask from "./AddTask"
 
 const taskDB = [
     {
@@ -85,6 +86,7 @@ export default function TaskList() {
 
     return(
         <View style={styles.container}>
+            <AddTask />
             <ImageBackground source={todayImage} style={styles.background}>
 
                 <View style={styles.iconBar}>
