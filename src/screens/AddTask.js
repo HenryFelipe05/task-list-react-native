@@ -1,17 +1,40 @@
+import { useState } from "react";
 import { Modal, StyleSheet, TouchableWithoutFeedback, Text, View, TextInput, TouchableOpacity } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import moment from "moment";
 
-export default function AddTask() {
+export default function AddTask(props) {
+    const [desc, setDesc] = useState("")
+    const [date, setDate] = useState(new Date())
+    const [showDatePicker, setShowDatePicker] = useState(false)
+
+    const handleDateChange = (event, selectedDate) => {
+        if(selectedDate) {
+            setDate(selectedDate)
+        }
+    } 
+
+    const formattedDate = moment(date).format('ddd, D [de] MMMM [de] YYYY')
+
     return(
-        <Modal transparent={true} visible={true} onRequestClose={() => console.warn('fechou')} animationType="slide">
-                <TouchableWithoutFeedback onPress={() => console.warn('fechou')}>
+        <Modal transparent={true} visible={props.isVisible} onRequestClose={props.onCancel} animationType="slide">
+                <TouchableWithoutFeedback onPress={props.onCancel}>
                     <View style={styles.background}></View>
                 </TouchableWithoutFeedback>
 
                 <View style={styles.container}>
                     <Text style={styles.header}>Nova Tarefa</Text>
-                    <TextInput style={styles.input} placeholder="Informe a descrição" onChange={() => console.warn('digitou')} value={''} />
+                    <TextInput style={styles.input} placeholder="Informe a descrição" onChange={setDesc} value={desc} />
+                    <View>
+                        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                            <Text style={styles.date}>{formattedDate}</Text>
+                        </TouchableOpacity>
+                        {showDatePicker && (
+                            <DateTimePicker value={date} mode="date" display="default" onChange={handleDateChange} />
+                        )}
+                    </View>
                     <View style={styles.buttons}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={props.onCancel}>
                             <Text style={styles.button}>Cancelar</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
@@ -20,7 +43,7 @@ export default function AddTask() {
                     </View>
                 </View>
 
-                <TouchableWithoutFeedback onPress={() => console.warn('fechou')}>
+                <TouchableWithoutFeedback onPress={props.onCancel}>
                     <View style={styles.background}></View>
                 </TouchableWithoutFeedback>
         </Modal>
